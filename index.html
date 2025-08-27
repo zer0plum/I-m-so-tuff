@@ -206,11 +206,6 @@ function revealGift(giftId, buttonId) {
   document.getElementById(giftId).style.display = 'block';
   document.getElementById(buttonId).style.display = 'none';
   document.getElementById(giftId).scrollIntoView({ behavior: 'smooth', block: 'start' });
-  if (giftId === 'gift1') {
-  const music = document.getElementById('bg-music');
-  music.play().catch(err => {
-    console.log("Autoplay blocked, will wait for another click.", err);
-  });
 }
 }
 
@@ -366,6 +361,7 @@ setInterval(createFloatingEmoji, 500);
 </script>
 </body>
 </html>
+
 
 
 
