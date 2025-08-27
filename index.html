@@ -207,8 +207,6 @@ function revealGift(giftId, buttonId) {
   document.getElementById(buttonId).style.display = 'none';
   document.getElementById(giftId).scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-}
-
 function createFloatingEmoji() {
   const emoji = document.createElement('div');
   emoji.classList.add('floating-emoji');
@@ -361,6 +359,7 @@ setInterval(createFloatingEmoji, 500);
 </script>
 </body>
 </html>
+
 
 
 
