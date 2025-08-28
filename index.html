@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  --primary-color: #e91e63;
+  --accent-color: #ff4081;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg-gradient);
+  margin: 0;
+  padding: 30px 15px;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+#emoji-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+.container {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  animation: fadeIn 1.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+h1 {
+  font-family: 'Pacifico', cursive;
+  color: var(--primary-color);
+  font-size: clamp(2em, 8vw, 2.8em);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+p {
+  color: #555;
+  font-size: clamp(1em, 4vw, 1.1em);
+  line-height: 1.6;
+}
+.surprise-box {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.surprise-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+}
+.gift {
+  display: none;
+  margin-top: 25px;
+  padding: 20px;
+  background: #fff3f8;
+  border-left: 5px solid var(--primary-color);
+  border-radius: 10px;
+  animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.gift-emoji {
+  font-size: 3em;
+}
+.final-message img {
+  max-width: 150px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+.floating-emoji {
+  position: absolute;
+  font-size: 2rem;
+  top: -5vh;
+  animation: fall linear infinite, glow 2s infinite alternate;
+  text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
+  pointer-events: none;
+}
+@keyframes fall { to { transform: translateY(105vh); } }
+@keyframes glow { from { opacity: 0.5; } to { opacity: 1; } }
+.sparkle {
+  position: fixed;
+  font-size: 1.5rem;
+  color: #FFD700;
+  pointer-events: none;
+  animation: sparkle-anim 0.8s forwards;
+  z-index: 1000;
+}
+@keyframes sparkle-anim {
+  0% { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(0) rotate(90deg); opacity: 0; }
+}
+.gift-box-container {
+  margin-top: 20px;
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+.gift-box-container:hover { transform: scale(1.1); }
+.gift-box { font-size: 4em; display: block; }
+.popping-emoji {
+  position: absolute;
+  font-size: 2em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: popUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+  z-index: 10;
+}
+.popping-emoji.trail {
+  animation: popUpWithTrail 1.5s ease-out forwards;
+}
+@keyframes popUp {
+  from { transform: translate(-50%, -50%) scale(0); }
+  to { transform: translate(-50%, -150%) scale(1.2); opacity: 0; }
+}
+@keyframes popUpWithTrail {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  50% { transform: translate(var(--x), var(--y)) scale(1); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) scale(0.5); opacity: 0; }
+}
+
+/* 🎆 Firework style */
+.firework-emoji {
+  position: fixed;
+  bottom: 0;
+  font-size: 2.5rem;
+  animation: shoot 1.8s ease-out forwards;
+  text-shadow: 0 0 8px #fff, 0 0 20px #ff0, 0 0 30px #f0f;
+  pointer-events: none;
+  z-index: 2000;
+}
+@keyframes shoot {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  70%  { transform: translateY(-70vh) scale(1.3); opacity: 1; }
+  100% { transform: translateY(-90vh) scale(0.5); opacity: 0; }
+}
+
+/* 🧸 Polo Teddy Surprise */
+.polo-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.8s ease;
+  z-index: 3000;
+  opacity: 0; /* Initially hidden */
+  pointer-events: none; /* Block clicks when hidden */
+  transition: opacity 0.4s ease-out; /* Smooth fade-in/out */
+}
+
+/* New CSS for the Instagram-style pop animation */
+.polo-container.visible {
+  opacity: 1;
+  pointer-events: auto; /* Allow clicks when visible */
+}
+.polo-emoji {
+  font-size: 6rem;
+  animation: instagramPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+  will-change: transform; /* Performance optimization */
+}
+.polo-text {
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 4px black;
+}
+.polo-message {
+  margin-top: 15px;
+  color: white;
+  text-align: center;
+  max-width: 80%;
+  font-size: 1rem;
+}
+.copy-btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: hotpink;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+.copy-btn:hover { transform: scale(1.05); }
+
+/* The Instagram-style pop animation */
+@keyframes instagramPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* New CSS for falling words */
+.falling-word {
+  position: fixed;
+  top: -50px; /* Start above the screen */
+  font-family: 'Pacifico', cursive; /* A nice, friendly font */
+  font-size: clamp(1.2em, 5vw, 2em); /* Responsive font size */
+  color: var(--primary-color); /* Matches your theme */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  pointer-events: none; /* Don't block clicks */
+  opacity: 0; /* Start invisible */
+  animation: fallAndFade 4s ease-in forwards; /* Animation for falling and fading */
+  z-index: 5000; /* Make sure they are on top */
+}
+
+@keyframes fallAndFade {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  20%  { opacity: 1; } /* Fully visible early in the fall */
+  80%  { transform: translateY(100vh) rotate(360deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+  <audio id="bg-music" loop>
+  <source src="https://github.com/0p1umbird/I-m-so-tuff/raw/refs/heads/main/beans%20(2).mp3">
+</audio>
+<div id="emoji-container"></div>
+<div class="container" onmousemove="createSparkle(event.clientX, event.clientY)" ontouchmove="handleTouch(event)" ontouchstart="handleTouch(event)">
+  <h1>Happy Birthday, Akhilaaaaaa!!!</h1>
+  <p>To my sweetest and prettiest best friend! Click the boxes to open your gifts!🤠 ✨</p>
+  <div class="surprise-box" id="step1" onclick="revealGift('gift1', 'step1')">
+    Click here for your first gift! 🎁
+  </div>
+  <div class="gift" id="gift1">
+    <div class="gift-emoji">💌</div>
+    <h2>Gift #1: A Shower of Compliments!</h2>
+    <p> Because you deserve to hear it! You are one of the kindest, most genuine, and brightest people I know. Your smile is Gorgeious, and you make the world a better place just by being in it. Never forget how amazing you are! 🥰</p>
+    <div class="gift-box-container" onclick="popGiftBox(this, 'step2')">
+      <span class="gift-box">🎁</span>
+    </div>
+  </div>
+  <div class="gift" id="gift2">
+    <div class="gift-emoji">🤗</div>
+    <h2>Gift #2: A Giant Virtual Hug!</h2>
+    <p>Since I can't be there in person, please accept this super-duper, extra-large virtual hug. I hope you feel all the warmth and happiness in the world today. Consider this a coupon for a real hug someday! 🤗❤️</p>
+    <div class="gift-box-container" onclick="popGiftBox(this, 'step3', true)">
+      <span class="gift-box">🎁</span>
+    </div>
+  </div>
+  <div class="gift" id="gift3">
+    <div class="gift-emoji">💖</div>
+    <h2>Gift #3: Endless Friendship!</h2>
+    <p>My final gift is a promise of friendship and endless support. I'm so incredibly grateful to have you as my best friend. Thank you for all the laughter and memories. I can't wait to make more! 💖</p>
+    <div class="gift-box-container" onclick="popGiftBox(this, null, 'hearts')">
+      <span class="gift-box">🎁</span>
+    </div>
+    <p class="final-message">Wishing you the happiest of birthdays, Akhila! I hope your day is as wonderful as you are. <br>Love you so much🤗🥰,stay happy everytime pretty souls like you deserves to be!!💝<br> <strong>(I Tried My Besttt!!😭🤧😚🤗) </strong></p>
+  </div>
+</div>
+
+<div id="poloGift" class="polo-container">
+  <div class="polo-text">Polo</div>
+  <div class="polo-emoji">🧸</div>
+  <button class="copy-btn" onclick="copyTeddy()">Copy to Keyboard</button>
+  <div class="polo-message">Grab this teddy!! This is a gift by me for you! Take care of it!!😭 :3</div>
+</div>
+
+<script>
+const emojiContainer = document.getElementById('emoji-container');
+const floatingEmojis = ['💖', '🧸', '🎀', '🍫', '🎂', '🎃', '✨'];
+const poppingEmojis = ['🍫', '🧸', '🎀', '💌', '💖'];
+const fallingWords = ['you', 'are', 'the', 'best', 'you', 'are', 'precious', 'pretty', 'loved', 'kissable', 'cute', 'lovely', 'kind', 'sweet', 'amazing', 'beautiful', 'wonderful', 'my bestie']; // Your words!
+
+function revealGift(giftId, buttonId) {
+  document.getElementById(giftId).style.display = 'block';
+  document.getElementById(buttonId).style.display = 'none';
+  document.getElementById(giftId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function createFloatingEmoji() {
+  const emoji = document.createElement('div');
+  emoji.classList.add('floating-emoji');
+  emoji.style.left = Math.random() * 100 + "vw";
+  emoji.style.animationDuration = Math.random() * 3 + 5 + "s";
+  emoji.innerText = floatingEmojis[Math.floor(Math.random() * floatingEmojis.length)];
+  emojiContainer.appendChild(emoji);
+  setTimeout(() => emoji.remove(), 8000);
+}
+function createSparkle(x, y) {
+  const sparkle = document.createElement('div');
+  sparkle.classList.add('sparkle');
+  sparkle.innerText = '✨';
+  sparkle.style.left = x + 'px';
+  sparkle.style.top = y + 'px';
+  document.body.appendChild(sparkle);
+  setTimeout(() => sparkle.remove(), 800);
+}
+function handleTouch(event) {
+  const touch = event.touches[0];
+  createSparkle(touch.clientX, touch.clientY);
+}
+let isThrottled = false;
+document.addEventListener('mousemove', (e) => {
+  if (!isThrottled) {
+    createSparkle(e.clientX, e.clientY);
+    isThrottled = true;
+    setTimeout(() => { isThrottled = false; }, 50);
+  }
+});
+
+// 🎆 Fireworks launch from bottom
+function launchFireworks() {
+  const fireworks = ["🎆","🎇","🎀","🧸",];
+  for (let i = 0; i < 6; i++) {
+    setTimeout(() => {
+      const fw = document.createElement("div");
+      fw.classList.add("firework-emoji");
+      fw.innerText = fireworks[Math.floor(Math.random() * fireworks.length)];
+      fw.style.left = Math.random() * 90 + "vw"; 
+      document.body.appendChild(fw);
+      setTimeout(() => fw.remove(), 2000);
+    }, i * 400);
+  }
+}
+
+// 🧸 Polo Teddy functions
+function showPoloGift() {
+  const poloGift = document.getElementById("poloGift");
+  poloGift.classList.add('visible');
+}
+
+function copyTeddy() {
+  navigator.clipboard.writeText("🧸").then(() => {
+    const copyBtn = document.querySelector('.copy-btn');
+    const originalText = copyBtn.innerText;
+    copyBtn.innerText = "Copied! 🎉";
+    
+    const poloGift = document.getElementById("poloGift");
+    poloGift.classList.remove('visible'); // Start fading out the teddy
+
+    setTimeout(() => {
+      // Restore button text (optional, but good for resetting)
+      copyBtn.innerText = originalText;
+      // Trigger the falling words after the teddy is fully gone
+      startFallingWords(); 
+    }, 600); // This delay should match the CSS transition duration for polo-container fade-out
+  }).catch(err => {
+    console.error('Failed to copy text: ', err);
+    alert('Oops! Could not copy the teddy. Please try again!');
+  });
+}
+
+// New function for falling words
+function startFallingWords() {
+  let wordIndex = 0;
+  const intervalId = setInterval(() => {
+    if (wordIndex >= fallingWords.length) {
+      clearInterval(intervalId); // Stop after all words have been launched
+      return;
+    }
+
+    const wordText = fallingWords[wordIndex];
+    const wordElement = document.createElement('div');
+    wordElement.classList.add('falling-word');
+    wordElement.innerText = wordText;
+    
+    // Randomize starting position and animation duration for variety
+    wordElement.style.left = Math.random() * 90 + "vw";
+    wordElement.style.animationDuration = Math.random() * 3 + 4 + "s"; // 4-7 seconds
+
+    document.body.appendChild(wordElement);
+
+    setTimeout(() => wordElement.remove(), 7000); // Remove after animation finishes
+
+    wordIndex++;
+  }, 200); // Launch a new word every 200 milliseconds
+}
+
+
+function popGiftBox(element, nextStepId, isHugBox=false) {
+  const boxRect = element.getBoundingClientRect();
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  const scrollX = window.scrollX || document.documentElement.scrollLeft;
+  const centerX = boxRect.left + scrollX + boxRect.width / 2;
+  const centerY = boxRect.top + scrollY + boxRect.height / 2;
+
+  element.style.opacity = '0';
+  element.style.transform = 'scale(0)';
+  element.style.pointerEvents = 'none';
+
+  let burstEmojis = poppingEmojis;
+  let mainEmoji = null;
+
+  if (isHugBox === true) {
+    mainEmoji = '🤗';
+    burstEmojis = ['❤️','💖','💕','💓','💗'];
+  } else if (isHugBox === 'hearts') {
+    burstEmojis = ['❤️','💖','💕','💓','💗','💞','💝','💟'];
+
+    // Launch fireworks
+    launchFireworks();
+
+    // After fireworks, show Polo Teddy
+    setTimeout(showPoloGift, 2500);
+  }
+
+  if (mainEmoji) {
+    const bigEmoji = document.createElement('div');
+    bigEmoji.style.position = 'absolute';
+    bigEmoji.style.fontSize = '5em';
+    bigEmoji.style.left = `${centerX}px`;
+    bigEmoji.style.top = `${centerY}px`;
+    bigEmoji.style.transform = 'translate(-50%, -50%) scale(0)';
+    bigEmoji.style.transition = 'transform 0.5s ease-out, opacity 0.5s ease-out';
+    bigEmoji.innerText = mainEmoji;
+    document.body.appendChild(bigEmoji);
+
+    setTimeout(() => bigEmoji.style.transform = 'translate(-50%, -50%) scale(1)', 10);
+    setTimeout(() => {
+      bigEmoji.style.opacity = '0';
+      bigEmoji.style.transform = 'translate(-50%, -50%) scale(0)';
+    }, 1000);
+    setTimeout(() => bigEmoji.remove(), 1500);
+  }
+
+  for (let i = 0; i < 15; i++) {
+    setTimeout(() => {
+      const emoji = document.createElement('div');
+      emoji.classList.add('popping-emoji');
+      emoji.innerText = burstEmojis[Math.floor(Math.random() * burstEmojis.length)];
+      emoji.style.left = `${centerX}px`;
+      emoji.style.top = `${centerY}px`;
+      emoji.style.position = 'absolute';
+      document.body.appendChild(emoji);
+
+      const angle = Math.random() * 360;
+      const distance = Math.random() * 150 + 50;
+      const endX = centerX + distance * Math.cos(angle * Math.PI / 180);
+      const endY = centerY + distance * Math.sin(angle * Math.PI / 180);
+
+      emoji.style.setProperty('--x', `${endX - centerX}px`);
+      emoji.style.setProperty('--y', `${endY - centerY}px`);
+      emoji.classList.add('trail');
+      setTimeout(() => emoji.remove(), 1500);
+    }, i * 20);
+  }
+
+  if (nextStepId) {
+    setTimeout(() => revealGift(nextStepId === 'step2' ? 'gift2' : 'gift3', nextStepId), 700);
+  }
+}
+
+setInterval(createFloatingEmoji, 500);
+</script>
+</body>
+    </html>
